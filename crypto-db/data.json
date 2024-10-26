@@ -1,0 +1,142 @@
+[
+  {
+    "name": "Bitcoin",
+    "symbol": "BTC",
+    "price_usd": 34000,
+    "24h_change": -2.1,
+    "market_cap_usd": 645000000000
+  },
+  {
+    "name": "Ethereum",
+    "symbol": "ETH",
+    "price_usd": 1800,
+    "24h_change": 1.5,
+    "market_cap_usd": 210000000000
+  },
+  {
+    "name": "Binance Coin",
+    "symbol": "BNB",
+    "price_usd": 250,
+    "24h_change": 0.3,
+    "market_cap_usd": 39000000000
+  },
+  {
+    "name": "Cardano",
+    "symbol": "ADA",
+    "price_usd": 0.29,
+    "24h_change": -0.8,
+    "market_cap_usd": 10000000000
+  },
+  {
+    "name": "Solana",
+    "symbol": "SOL",
+    "price_usd": 32,
+    "24h_change": 2.7,
+    "market_cap_usd": 12000000000
+  },
+  {
+    "name": "XRP",
+    "symbol": "XRP",
+    "price_usd": 0.49,
+    "24h_change": -1.4,
+    "market_cap_usd": 25000000000
+  },
+  {
+    "name": "Dogecoin",
+    "symbol": "DOGE",
+    "price_usd": 0.07,
+    "24h_change": 0.6,
+    "market_cap_usd": 10000000000
+  },
+  {
+    "name": "Polkadot",
+    "symbol": "DOT",
+    "price_usd": 4.2,
+    "24h_change": -1.2,
+    "market_cap_usd": 8000000000
+  },
+  {
+    "name": "Polygon",
+    "symbol": "MATIC",
+    "price_usd": 0.85,
+    "24h_change": 1.1,
+    "market_cap_usd": 7200000000
+  },
+  {
+    "name": "Litecoin",
+    "symbol": "LTC",
+    "price_usd": 68,
+    "24h_change": -0.7,
+    "market_cap_usd": 4600000000
+  },
+  {
+    "name": "Shiba Inu",
+    "symbol": "SHIB",
+    "price_usd": 0.000007,
+    "24h_change": 2.4,
+    "market_cap_usd": 4200000000
+  },
+  {
+    "name": "Chainlink",
+    "symbol": "LINK",
+    "price_usd": 9.5,
+    "24h_change": 3.5,
+    "market_cap_usd": 4900000000
+  },
+  {
+    "name": "Avalanche",
+    "symbol": "AVAX",
+    "price_usd": 10.4,
+    "24h_change": -2.2,
+    "market_cap_usd": 6700000000
+  },
+  {
+    "name": "Stellar",
+    "symbol": "XLM",
+    "price_usd": 0.11,
+    "24h_change": 0.2,
+    "market_cap_usd": 3000000000
+  },
+  {
+    "name": "VeChain",
+    "symbol": "VET",
+    "price_usd": 0.018,
+    "24h_change": 1.7,
+    "market_cap_usd": 1200000000
+  },
+  {
+    "name": "Cosmos",
+    "symbol": "ATOM",
+    "price_usd": 7.2,
+    "24h_change": -0.9,
+    "market_cap_usd": 2500000000
+  },
+  {
+    "name": "Monero",
+    "symbol": "XMR",
+    "price_usd": 150,
+    "24h_change": 0.4,
+    "market_cap_usd": 2800000000
+  },
+  {
+    "name": "Bitcoin Cash",
+    "symbol": "BCH",
+    "price_usd": 220,
+    "24h_change": 1.8,
+    "market_cap_usd": 4000000000
+  },
+  {
+    "name": "Algorand",
+    "symbol": "ALGO",
+    "price_usd": 0.1,
+    "24h_change": -3.5,
+    "market_cap_usd": 900000000
+  },
+  {
+    "name": "Filecoin",
+    "symbol": "FIL",
+    "price_usd": 3.4,
+    "24h_change": -2.0,
+    "market_cap_usd": 1400000000
+  }
+]
