@@ -51,6 +51,10 @@ app.use(cors());
 app.use(helmet());
 
 app.use('/api/v1', AuthRouter);
+app.get("/health",(req,res)=>{
+  return res.status(200).json({message:"Healthy"})
+  
+})
 
 server.listen(process.env.PORT, () => {
   console.log('Server is running on port ' + process.env.PORT);
