@@ -13,20 +13,33 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ['http://127.0.0.1:5500','https://shu12388y.github.io']
+    origin: ['http://127.0.0.1:5500', 'https://shu12388y.github.io']
   },
 });
 
+// Load initial data
 let data = JSON.parse(fs.readFileSync('./crypto-db/data.json', 'utf-8'));
 let Db = data;
 
 setInterval(() => {
   for (let i = 0; i < Db.length; i++) {
-    Db[i].price_usd = (Math.random() * 1000).toFixed(2);
+    // Randomly fluctuate the price within a range
+    const priceFluctuation = Db[i].price_usd * (Math.random() ); // +/- 1% fluctuation
+    Db[i].price_usd = parseFloat((Db[i].price_usd + priceFluctuation).toFixed(2));
+
+    // Calculate new market cap based on updated price and a random fluctuation factor
+    const marketCapFluctuation = Db[i].market_cap_usd * (Math.random() * 0.02 - 0.01); // +/- 1% fluctuation
+    Db[i].market_cap_usd = parseFloat((Db[i].market_cap_usd + marketCapFluctuation).toFixed(2));
+
+    // Randomly set 24h_change to a value between -5% and +5%
+    Db[i]["24h_change"] = parseFloat((Math.random() * 10 - 5).toFixed(2));
   }
-  io.emit('price', Db);
+
+  // Emit the updated data to clients every second
+  io.emit("price", Db);
 }, 1000);
 
+// Authentication Middleware
 io.use((socket, next) => {
   const headers = socket.handshake.headers;
   const authToken = headers['authorization'];
@@ -38,8 +51,9 @@ io.use((socket, next) => {
   next(); // Allow the connection if the token is valid
 });
 
+// Handle connections and initial data
 io.on('connection', (socket) => {
-  socket.emit('price', Db);
+  socket.emit('price', Db); // Send current data immediately on connection
 
   socket.on('disconnect', () => {
     console.log('A user disconnected:', socket.id);
@@ -51,10 +65,9 @@ app.use(cors());
 app.use(helmet());
 
 app.use('/api/v1', AuthRouter);
-app.get("/health",(req,res)=>{
-  return res.status(200).json({message:"Healthy"})
-  
-})
+app.get("/health", (req, res) => {
+  return res.status(200).json({ message: "Healthy" });
+});
 
 server.listen(process.env.PORT, () => {
   console.log('Server is running on port ' + process.env.PORT);
