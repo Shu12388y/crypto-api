@@ -1,55 +1,118 @@
-## Crypto Price Backend
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Price Updates</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
 
-This project is a backend server that provides real-time cryptocurrency price updates using Socket.IO. It listens to crypto price changes and broadcasts updates to connected clients.
+    h1 {
+      text-align: center;
+    }
 
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
 
-### Features
--  Real-time Cryptocurrency Prices: Live price updates for cryptocurrencies.
--  WebSocket Communication: Utilizes Socket.IO for real-time communication.
--  API Integration: Fetches live crypto prices from an external API.
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #ccc;
+    }
 
+    th {
+      background-color: #007bff;
+      color: white;
+    }
 
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
 
-## Installation
+    .change-positive {
+      color: green;
+    }
+    .change-negative {
+      color: red;
+    }
 
-- Install the project with npm
-
-```bash
-  npm install
-
-```
-
-- Run the project
-
-```bash
-    npm run dev
-```
-## Tech Stack
-
-**Server:** Node, Express, Socket.io
-
-
-## Usage 
-
-```javascript
+    /* Highlight animation for updated cells */
+    .updated {
+      animation: highlight 1s ease;
+    }
+    @keyframes highlight {
+      0% { background-color: #fffae6; }
+      100% { background-color: transparent; }
+    }
+  </style>
+  <!-- Include socket.io client -->
+  <script src="https://cdn.socket.io/4.8.0/socket.io.min.js"></script>
+</head>
+<body>
+  <h1>Live Price Updates</h1>
+  <div id="prices">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Symbol</th>
+          <th>Price (USD)</th>
+          <th>24h Change (%)</th>
+          <th>Market Cap (USD)</th>
+        </tr>
+      </thead>
+      <tbody id="prices-body">
+        <!-- Data will be injected here -->
+      </tbody>
+    </table>
+  </div>
+  <script>
     const socket = io('https://crytpoapiws.apibazar.site', {
       extraHeaders: {
         Authorization: 'Bearer shubham',
       },
     });
-```
+    // Function to update a cell's text content with an animation
+    function updateCell(cell, newValue) {
+      if (cell.textContent !== newValue) {
+        cell.classList.add('updated'); // Add animation class
+        cell.textContent = newValue;
+        // Remove the animation class after the animation ends
+        cell.addEventListener('animationend', () => {
+          cell.classList.remove('updated');
+        }, { once: true });
+      }
+    }
+    // Listen for "price" event from the server
+    socket.on('price', (data) => {
+      const tbody = document.getElementById('prices-body');
+      tbody.innerHTML = '';
+      data.forEach(crypto => {
+        const row = document.createElement('tr');
+        const changeClass = crypto['24h_change'] > 0 ? 'change-positive' : 'change-negative';
+        row.innerHTML = `
+          <td>${crypto.name}</td>
+          <td>${crypto.symbol}</td>
+          <td class="price">$${parseFloat(crypto.price_usd).toFixed(2)}</td>
+          <td class="change ${changeClass}">${crypto['24h_change'].toFixed(2)}%</td>
+          <td class="market-cap">$${parseFloat(crypto.market_cap_usd).toFixed(2)}</td>
+        `;
+        tbody.appendChild(row);
 
-
-## Contributing
-
-Contributions are always welcome!
-
-See `contributing.md` for ways to get started.
-
-Please adhere to this project's `code of conduct`.
-
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
-
+        // Apply animation on new data
+        updateCell(row.querySelector('.price'), `$${parseFloat(crypto.price_usd).toFixed(2)}`);
+        updateCell(row.querySelector('.change'), `${crypto['24h_change'].toFixed(2)}%`);
+        updateCell(row.querySelector('.market-cap'), `$${parseFloat(crypto.market_cap_usd).toFixed(2)}`);
+      });
+    });
+  </script>
+</body>
+</html>
