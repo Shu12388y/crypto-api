@@ -29,6 +29,17 @@ This project is a backend server that provides real-time cryptocurrency price up
 **Server:** Node, Express, Socket.io
 
 
+## Usage 
+
+```javascript
+    const socket = io('https://crytpoapiws.apibazar.site', {
+      extraHeaders: {
+        Authorization: 'Bearer shubham',
+      },
+    });
+```
+
+
 ## Contributing
 
 Contributions are always welcome!
