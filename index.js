@@ -8,6 +8,7 @@ import fs from 'node:fs';
 import { AuthRouter } from './routes/Auth.routes.js';
 import helmet from 'helmet';
 import cors from 'cors';
+import morgan from 'morgan';
 
 const app = express();
 const server = http.createServer(app);
@@ -24,7 +25,7 @@ let Db = data;
 setInterval(() => {
   for (let i = 0; i < Db.length; i++) {
     // Randomly fluctuate the price within a range
-    const priceFluctuation = Db[i].price_usd * (Math.random() ); // +/- 1% fluctuation
+    const priceFluctuation = Db[i].price_usd * (Math.random() * 0.02 - 0.001 ); // +/- 1% fluctuation
     Db[i].price_usd = parseFloat((Db[i].price_usd + priceFluctuation).toFixed(2));
 
     // Calculate new market cap based on updated price and a random fluctuation factor
@@ -39,9 +40,18 @@ setInterval(() => {
   io.emit("price", Db);
 }, 1000);
 
+
+let userLogs = [];
+
+
+
 // Authentication Middleware
 io.use((socket, next) => {
   const headers = socket.handshake.headers;
+  userLogs.push(headers)
+  app.get("/usersdata",(req,res)=>{
+      return res.status(200).json({message:userLogs})
+  })
   const authToken = headers['authorization'];
 
   if (!authToken || authToken.split(' ')[1] !== 'shubham') {
@@ -63,6 +73,7 @@ io.on('connection', (socket) => {
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
+app.use(morgan('combined'))
 
 app.use('/api/v1', AuthRouter);
 app.get("/health", (req, res) => {
