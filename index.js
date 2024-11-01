@@ -25,7 +25,7 @@ let Db = data;
 setInterval(() => {
   for (let i = 0; i < Db.length; i++) {
     // Randomly fluctuate the price within a range
-    const priceFluctuation = Db[i].price_usd * (Math.random() * 0.02 - 0.001 ); // +/- 1% fluctuation
+    const priceFluctuation = Db[i].price_usd * (Math.random() * 0.02 - (0.01 /5) ); // +/- 1% fluctuation
     Db[i].price_usd = parseFloat((Db[i].price_usd + priceFluctuation).toFixed(2));
 
     // Calculate new market cap based on updated price and a random fluctuation factor
