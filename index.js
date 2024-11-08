@@ -14,7 +14,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ['http://127.0.0.1:5500', 'https://shu12388y.github.io']
+    origin: ['http://127.0.0.1:5500', 'https://shu12388y.github.io'],
   },
 });
 
@@ -25,33 +25,39 @@ let Db = data;
 setInterval(() => {
   for (let i = 0; i < Db.length; i++) {
     // Randomly fluctuate the price within a range
-    const priceFluctuation = Db[i].price_usd * (Math.random() * 0.02 - (0.01 /5) ); // +/- 1% fluctuation
-    Db[i].price_usd = parseFloat((Db[i].price_usd + priceFluctuation).toFixed(2));
+    // const priceFluctuation = Db[i].price_usd * (Math.random() * 0.02 - 0.01); // +/- 1% fluctuation
+    const priceUsd = Db[i].price_usd ?? 0; // Default to 0 if undefined or null
+    const fluctuationPercentage = Math.random() * 0.02 - 0.01; // Between -0.01 and 0.01
+    const priceFluctuation = priceUsd * fluctuationPercentage;
+
+    Db[i].price_usd = parseFloat(
+      (Db[i].price_usd + priceFluctuation).toFixed(2)
+    );
 
     // Calculate new market cap based on updated price and a random fluctuation factor
-    const marketCapFluctuation = Db[i].market_cap_usd * (Math.random() * 0.02 - 0.01); // +/- 1% fluctuation
-    Db[i].market_cap_usd = parseFloat((Db[i].market_cap_usd + marketCapFluctuation).toFixed(2));
+    const marketCapFluctuation =
+      Db[i].market_cap_usd * (Math.random() * 0.02 - 0.01); // +/- 1% fluctuation
+    Db[i].market_cap_usd = parseFloat(
+      (Db[i].market_cap_usd + marketCapFluctuation).toFixed(2)
+    );
 
     // Randomly set 24h_change to a value between -5% and +5%
-    Db[i]["24h_change"] = parseFloat((Math.random() * 10 - 5).toFixed(2));
+    Db[i]['24h_change'] = parseFloat((Math.random() * 10 - 5).toFixed(2));
   }
 
   // Emit the updated data to clients every second
-  io.emit("price", Db);
+  io.emit('price', Db);
 }, 1000);
 
-
 let userLogs = [];
-
-
 
 // Authentication Middleware
 io.use((socket, next) => {
   const headers = socket.handshake.headers;
-  userLogs.push(headers)
-  app.get("/usersdata",(req,res)=>{
-      return res.status(200).json({message:userLogs})
-  })
+  userLogs.push(headers);
+  app.get('/usersdata', (req, res) => {
+    return res.status(200).json({ message: userLogs });
+  });
   const authToken = headers['authorization'];
 
   if (!authToken || authToken.split(' ')[1] !== 'shubham') {
@@ -73,11 +79,11 @@ io.on('connection', (socket) => {
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
-app.use(morgan('combined'))
+app.use(morgan('combined'));
 
 app.use('/api/v1', AuthRouter);
-app.get("/health", (req, res) => {
-  return res.status(200).json({ message: "Healthy" });
+app.get('/health', (req, res) => {
+  return res.status(200).json({ message: 'Healthy' });
 });
 
 server.listen(process.env.PORT, () => {
